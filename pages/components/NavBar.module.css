@@ -1,2 +1,7 @@
-.nav {
+.link {
+  /* common style */
+  text-decoration: none;
+}
+.active {
+  color: tomato;
 }

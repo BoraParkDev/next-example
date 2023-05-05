@@ -24,11 +24,22 @@ export default function NavBar() {
   }, [router.pathname]);
 
   return (
-    <nav className={styles.nav}>
-      <Link href="/" style={{ color: color }}>
+    <nav>
+      <Link
+        href="/"
+        className={`${styles.link} ${
+          router.pathname === "/" ? styles.active : ""
+        }`}
+      >
         Home
       </Link>
-      <Link href="/about" style={{ color: color2 }}>
+      <Link
+        href="/about"
+        className={[
+          styles.link,
+          router.pathname === "/about" ? styles.active : "",
+        ].join(" ")}
+      >
         About
       </Link>
     </nav>
