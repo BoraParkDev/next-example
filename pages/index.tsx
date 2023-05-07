@@ -17,6 +17,7 @@ export type ResultType = {
 
 export default function Home({ data }: { data: DataType }) {
   const router = useRouter();
+  console.log(router);
   const movies = data.results;
 
   const onClick = (movie: ResultType) => {
