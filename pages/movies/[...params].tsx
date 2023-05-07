@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React from "react";
+import Seo from "../components/Seo";
 
 export type ParamsType = string[];
 
@@ -12,6 +13,7 @@ export default function Detail({ params }: PropsTypes) {
 
   return (
     <div>
+      <Seo title={title} />
       <h4>{title}</h4>
     </div>
   );
