@@ -41,7 +41,17 @@ export default function Home({ data }: { data: DataType }) {
         >
           <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
           <h4>
-            <Link href={`/movies/${movie.id}`}>{movie.original_title}</Link>
+            <Link
+              href={{
+                pathname: `/movies/${movie.id}`,
+                query: {
+                  title: `${movie.original_title}`,
+                },
+              }}
+              as={`/movies/${movie.id}`}
+            >
+              {movie.original_title}
+            </Link>
           </h4>
         </div>
       ))}
