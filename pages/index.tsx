@@ -1,4 +1,6 @@
+import Link from "next/link";
 import Seo from "./components/Seo";
+import { useRouter } from "next/router";
 
 export type DataType = {
   [k in
@@ -14,15 +16,33 @@ export type ResultType = {
 };
 
 export default function Home({ data }: { data: DataType }) {
-  console.log(data);
+  const router = useRouter();
   const movies = data.results;
+
+  const onClick = (movie: ResultType) => {
+    router.push(
+      {
+        pathname: `/movies/${movie.id}`,
+        query: {
+          title: `${movie.original_title}`,
+        },
+      },
+      `/movies/${movie.id}`
+    );
+  };
   return (
     <div className="container">
       <Seo title="Home" />
       {movies.map((movie) => (
-        <div key={movie.id as number} className="movie">
+        <div
+          key={movie.id as number}
+          className="movie"
+          onClick={() => onClick(movie)}
+        >
           <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
-          <h4>{movie.original_title}</h4>
+          <h4>
+            <Link href={`/movies/${movie.id}`}>{movie.original_title}</Link>
+          </h4>
         </div>
       ))}
       <style jsx>{`
