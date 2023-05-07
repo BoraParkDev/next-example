@@ -1,27 +1,12 @@
-import { useEffect, useState } from "react";
 import Seo from "./components/Seo";
 
-export type MovieObjectType = { [property: string]: string };
-export default function Home() {
-  const [movies, setMovies] = useState<MovieObjectType[]>([]);
-  useEffect(() => {
-    //effect는 컴포넌트가 렌더링되고 난 이후에 실행됨
-    //이 함수는 비동기로 동작. 렌더링 이후에 발생하는 모든 변경사항을 처리함
-    //이 함수를 즉시 실행하여 초기화 작업을 수행해야 할 때가 있음
-    //예를 들어 컴포넌트가 마운트될 때 함수를 즉시 실행하여 데이터 세팅 작업을 수행함
-    (async () => {
-      const resp = await fetch("/api/movies");
-      const { results } = await resp.json();
-      setMovies(results);
-    })();
-  }, []);
-  console.log(movies);
+export default function Home({ data }) {
+  console.log(data);
 
   return (
     <div className="container">
       <Seo title="Home" />
-      {!movies && <h4>Loading...</h4>}
-      {movies?.map((movie) => (
+      {data.results.map((movie) => (
         <div key={movie.id} className="movie">
           <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
           <h4>{movie.original_title}</h4>
@@ -50,4 +35,26 @@ export default function Home() {
       `}</style>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  //여기서 작성된 코드는 서버에서 실행됨 (브라우저에서 실행되지 않음)
+  //이 함수는 브라우저에서 실행되지 않기 때문에 브라우저에서 접근할 수 없는 데이터에 접근할 수 있음
+  //예를 들어 데이터베이스 액세스, 파일 시스템 액세스, API 호출 등을 수행할 수 있음
+  //이 함수는 페이지가 요청될 때마다 실행됨
+  const res = await fetch(`http://localhost:3000/api/movies`);
+  const data = await res.json();
+  if (!data) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {
+      data,
+    },
+  };
 }
