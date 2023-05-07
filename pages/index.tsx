@@ -1,13 +1,26 @@
 import Seo from "./components/Seo";
 
-export default function Home({ data }) {
-  console.log(data);
+export type DataType = {
+  [k in
+    | "page"
+    | "results"
+    | "total_pages"
+    | "total_results"]: k extends "results" ? ResultType[] : number;
+};
+export type PropertyProps = string | number | boolean | number[];
 
+export type ResultType = {
+  [k in string]: PropertyProps;
+};
+
+export default function Home({ data }: { data: DataType }) {
+  console.log(data);
+  const movies = data.results;
   return (
     <div className="container">
       <Seo title="Home" />
-      {data.results.map((movie) => (
-        <div key={movie.id} className="movie">
+      {movies.map((movie) => (
+        <div key={movie.id as number} className="movie">
           <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
           <h4>{movie.original_title}</h4>
         </div>
